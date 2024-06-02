@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Test</title>
+    <style>
+        #results {
+            white-space: pre-wrap; /* Preserve newlines and spaces */
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Internet Speed Test</h1>
+    <button id="speedtest-button">Run Speed Test</button>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('speedtest-button').addEventListener('click', function() {
+            let resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = "Running speed test...";
+
+            fetch('/run-speedtest', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = '';
+                if (data.stdout) {
+                    resultsDiv.innerHTML += `<pre>${data.stdout}</pre>`;
+                }
+                if (data.stderr) {
+                    resultsDiv.innerHTML += `<pre style="color: red;">${data.stderr}</pre>`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
